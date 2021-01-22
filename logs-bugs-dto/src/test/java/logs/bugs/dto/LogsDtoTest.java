@@ -1,6 +1,9 @@
 package logs.bugs.dto;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,16 +41,46 @@ public class LogsDtoTest {
     @Autowired
     MockMvc mock;
 
-    @Test
-    void testPostRun() throws Exception {
-
-        assertEquals(200, mock.perform(post("/")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(mapper.writeValueAsString(TestController.logDtoExp)))
-                .andReturn()
-                .getResponse()
-                .getStatus());
+    @BeforeEach
+    public void setup() {
+        TestController.logDtoExp.dateTime = new Date();
+        TestController.logDtoExp.logType = LogType.NO_EXCEPTION;
+        TestController.logDtoExp.artifact = "artifact";
+        TestController.logDtoExp.responseTime = 0;
+        TestController.logDtoExp.result = "";
     }
 
 
+    @Nested
+    class faildTests {
+        @DisplayName("dateTime = null")
+        @Test
+        void testArifactDateNull() throws Exception {
+            TestController.logDtoExp.dateTime = null;
+            assertEquals(400,
+                    mock.perform(post("/").contentType(MediaType.APPLICATION_JSON)
+                            .content(mapper.writeValueAsString(TestController.logDtoExp))).andReturn().getResponse()
+                            .getStatus());
+        }
+
+        @DisplayName("logType = null")
+        @Test
+        void testLogType() throws Exception {
+            TestController.logDtoExp.logType = null;
+            assertEquals(400,
+                    mock.perform(post("/").contentType(MediaType.APPLICATION_JSON)
+                            .content(mapper.writeValueAsString(TestController.logDtoExp))).andReturn().getResponse()
+                            .getStatus());
+        }
+
+        @DisplayName("artifact = ''")
+        @Test
+        void testArtifactEmpty() throws Exception {
+            TestController.logDtoExp.artifact = "";
+            assertEquals(400,
+                    mock.perform(post("/").contentType(MediaType.APPLICATION_JSON)
+                            .content(mapper.writeValueAsString(TestController.logDtoExp))).andReturn().getResponse()
+                            .getStatus());
+        }
+    }
 }
