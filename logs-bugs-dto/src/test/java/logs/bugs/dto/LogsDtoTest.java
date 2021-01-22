@@ -49,5 +49,5 @@ public class LogsDtoTest {
                 .getStatus());
     }
 
-    //some new code
+
 }

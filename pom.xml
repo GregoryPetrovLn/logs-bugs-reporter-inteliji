@@ -5,6 +5,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>logs-bugs-dto</module>
+        <module>logs-bugs-mongo-document</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
