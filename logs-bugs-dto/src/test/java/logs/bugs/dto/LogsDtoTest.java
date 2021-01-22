@@ -48,4 +48,6 @@ public class LogsDtoTest {
                 .getResponse()
                 .getStatus());
     }
+
+    //some new code
 }
