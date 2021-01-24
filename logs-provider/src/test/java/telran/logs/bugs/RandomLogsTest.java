@@ -60,18 +60,21 @@ public class RandomLogsTest {
                 (EnumMap<LogType, String>) getMapMethod.invoke(randomLogs);
         return logTypeArtifactsMap;
     }
-    @Test
-    void generation() throws Exception{
 
-        List<LogDto> logs =Stream
+    @Test
+    void generation() throws Exception {
+
+        List<LogDto> logs = Stream
                 .generate(() -> randomLogs.createRandomLog()).limit(N_LOGS)
                 .collect(Collectors.toList());
         testLogContent(logs);
         Map<LogType, Long> logTypeOccurrences =
                 logs.stream().collect(Collectors.groupingBy(l -> l.logType, Collectors.counting()));
         logTypeOccurrences.forEach((k, v) -> {
-            System.out.println();
+            System.out.printf("Log type : %s, count : %d\n", k, v);
         });
+
+        assertEquals(LogType.values().length, logTypeOccurrences.entrySet().size());
 
     }
 

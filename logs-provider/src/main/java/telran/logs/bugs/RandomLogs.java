@@ -14,6 +14,7 @@ public class RandomLogs {
     int secExceptionProb = 30;
     int exceptionProb = 10;
     int authenticationProb = 70;
+
     public LogDto createRandomLog() {
         LogType logType = getLogType();
         return new LogDto(new Date(), logType, getArtifact(logType), getResponseTime(logType), "");
@@ -22,10 +23,10 @@ public class RandomLogs {
     private int getResponseTime(LogType logType) {
 
         return logType == LogType.NO_EXCEPTION ?
-                ThreadLocalRandom.current().nextInt(20, 200):0;
+                ThreadLocalRandom.current().nextInt(20, 200) : 0;
     }
 
-    private  String getArtifact(LogType logType) {
+    private String getArtifact(LogType logType) {
         EnumMap<LogType, String> logArtifact = getLogArtifactMap();
         return logArtifact.get(logType);
     }
@@ -39,7 +40,7 @@ public class RandomLogs {
     }
 
     private void fillLogTypeArtifactMap(EnumMap<LogType, String> res, LogType lt) {
-        switch(lt) {
+        switch (lt) {
             case AUTHENTICATION_EXCEPTION:
                 res.put(LogType.AUTHENTICATION_EXCEPTION, "authentication");
                 break;
@@ -52,14 +53,14 @@ public class RandomLogs {
             case DUPLICATED_KEY_EXCEPTION:
                 res.put(LogType.DUPLICATED_KEY_EXCEPTION, "class");
                 break;
-            case  NOT_FOUND_EXCEPTION:
-                res.put(LogType. NOT_FOUND_EXCEPTION, "class");
+            case NOT_FOUND_EXCEPTION:
+                res.put(LogType.NOT_FOUND_EXCEPTION, "class");
                 break;
             case NO_EXCEPTION:
-                res.put(LogType. NO_EXCEPTION, "class");
+                res.put(LogType.NO_EXCEPTION, "class");
                 break;
             case SERVER_EXCEPTION:
-                res.put(LogType. SERVER_EXCEPTION, "class");
+                res.put(LogType.SERVER_EXCEPTION, "class");
                 break;
 
 
@@ -89,7 +90,7 @@ public class RandomLogs {
 
     private LogType getSecurityExceptionLog() {
 
-        return getChance() <= authenticationProb ? LogType.AUTHENTICATION_EXCEPTION : LogType.AUTHENTICATION_EXCEPTION ;
+        return getChance() <= authenticationProb ? LogType.AUTHENTICATION_EXCEPTION : LogType.AUTHORIZATION_EXCEPTION;
     }
 
     private int getChance() {
