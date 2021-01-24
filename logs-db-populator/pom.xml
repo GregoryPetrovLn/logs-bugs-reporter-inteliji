@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>logs-provider</artifactId>
+    <artifactId>logs-db-populator</artifactId>
 
     <properties>
         <maven.compiler.source>13</maven.compiler.source>
@@ -19,7 +19,7 @@
     <dependencies>
         <dependency>
             <groupId>telran.logs.bugs</groupId>
-            <artifactId>logs-bugs-dto</artifactId>
+            <artifactId>logs-bugs-mongo-document</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
         <dependency>
@@ -38,7 +38,6 @@
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-stream-binder-kafka</artifactId>
         </dependency>
-
 
 
     </dependencies>
