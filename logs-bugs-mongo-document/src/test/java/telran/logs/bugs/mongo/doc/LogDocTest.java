@@ -24,10 +24,10 @@ public class LogDocTest {
 
     @Test
     void docStoreTest() {
-        LogDto logDto = new LogDto(new Date(), LogType.NO_EXCEPTION, "artifact", 20, "result");
-
-        LogDoc doc = logs.save(new LogDoc(logDto));
-        LogDoc actual = logs.findAll().get(0);
-        assertEquals(logDto, actual.getLogDto());
+        LogDto logDto = new LogDto(new Date(), LogType.NO_EXCEPTION, "artifact",
+                20, "result");
+        logs.save(new LogDoc(logDto));
+        LogDoc actualDoc = logs.findAll().get(0) ;
+        assertEquals(logDto, actualDoc.getLogDto());
     }
 }

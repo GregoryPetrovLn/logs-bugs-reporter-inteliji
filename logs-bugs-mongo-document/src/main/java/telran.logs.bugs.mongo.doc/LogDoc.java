@@ -5,12 +5,14 @@ import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 @Document(collection = "logs")
 public class LogDoc {
     @Id
     ObjectId id;
+    @NotNull
     Date dateTime;
     LogType logType;
     String artifact;
@@ -25,7 +27,7 @@ public class LogDoc {
         result = logDto.result;
     }
 
-    public LogDoc(Date dateTime, LogType logType, String artifact, int responseTime, String result) {
+    public LogDoc(@NotNull Date dateTime, LogType logType, String artifact, int responseTime, String result) {
         this.dateTime = dateTime;
         this.logType = logType;
         this.artifact = artifact;

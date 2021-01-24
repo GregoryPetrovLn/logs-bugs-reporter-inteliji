@@ -6,6 +6,7 @@
     <modules>
         <module>logs-bugs-dto</module>
         <module>logs-bugs-mongo-document</module>
+        <module>logs-provider</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
