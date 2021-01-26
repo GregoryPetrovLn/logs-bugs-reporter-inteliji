@@ -1,10 +1,7 @@
 package logs.bugs.dto;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -25,62 +22,61 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 
 //@ExtendWith(SprinngExtention.class)
 @AutoConfigureMockMvc
-@WebMvcTest
+@WebMvcTest(LogsDtoTest.TestController.class)
 @ContextConfiguration(classes = LogsDtoTest.TestController.class)
 public class LogsDtoTest {
-
-    public static @RestController class TestController {
-        static LogDto logDtoExp = new LogDto(new Date(), LogType.NO_EXCEPTION, "artifact", 0, "");
+    public static @RestController
+    class TestController {
+        static LogDto logDtoExp;
 
         @PostMapping("/")
         void testPost(@RequestBody @Valid LogDto logDto) {
             assertEquals(logDtoExp, logDto);
         }
     }
+
     ObjectMapper mapper = new ObjectMapper();
     @Autowired
     MockMvc mock;
 
     @BeforeEach
-    public void setup() {
-        TestController.logDtoExp.dateTime = new Date();
-        TestController.logDtoExp.logType = LogType.NO_EXCEPTION;
-        TestController.logDtoExp.artifact = "artifact";
-        TestController.logDtoExp.responseTime = 0;
-        TestController.logDtoExp.result = "";
+    void setUp() {
+        TestController.logDtoExp = new LogDto(new Date(), LogType.NO_EXCEPTION,
+                "artifact", 0, "");
     }
 
+    @Test
+    void testPostNormal() throws Exception {
+        int statusExp = 200;
+        testPost(statusExp);
+    }
 
-    @Nested
-    class faildTests {
-        @DisplayName("dateTime = null")
-        @Test
-        void testArifactDateNull() throws Exception {
-            TestController.logDtoExp.dateTime = null;
-            assertEquals(400,
-                    mock.perform(post("/").contentType(MediaType.APPLICATION_JSON)
-                            .content(mapper.writeValueAsString(TestController.logDtoExp))).andReturn().getResponse()
-                            .getStatus());
-        }
+    @Test
+    void testPostNoDate() throws Exception {
+        TestController.logDtoExp.dateTime = null;
+        int statusExp = 400;
+        testPost(statusExp);
+    }
 
-        @DisplayName("logType = null")
-        @Test
-        void testLogType() throws Exception {
-            TestController.logDtoExp.logType = null;
-            assertEquals(400,
-                    mock.perform(post("/").contentType(MediaType.APPLICATION_JSON)
-                            .content(mapper.writeValueAsString(TestController.logDtoExp))).andReturn().getResponse()
-                            .getStatus());
-        }
+    @Test
+    void testPostNoType() throws Exception {
+        TestController.logDtoExp.logType = null;
+        int statusExp = 400;
+        testPost(statusExp);
+    }
 
-        @DisplayName("artifact = ''")
-        @Test
-        void testArtifactEmpty() throws Exception {
-            TestController.logDtoExp.artifact = "";
-            assertEquals(400,
-                    mock.perform(post("/").contentType(MediaType.APPLICATION_JSON)
-                            .content(mapper.writeValueAsString(TestController.logDtoExp))).andReturn().getResponse()
-                            .getStatus());
-        }
+    @Test
+    void testPostNoArtifact() throws Exception {
+        TestController.logDtoExp.artifact = "";
+        int statusExp = 400;
+        testPost(statusExp);
+    }
+
+    private void testPost(int statusExp) throws Exception {
+        assertEquals(statusExp, mock.perform(post("/")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsString(TestController.logDtoExp)))
+                .andReturn()
+                .getResponse().getStatus());
     }
 }

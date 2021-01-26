@@ -1,6 +1,8 @@
 package logs.bugs.dto;
 import java.util.Date;
+import java.util.Set;
 
+import javax.validation.*;
 import javax.validation.constraints.*;
 
 public class LogDto {
@@ -21,6 +23,16 @@ public class LogDto {
         this.artifact = artifact;
         this.responseTime = responseTime;
         this.result = result;
+        validator();
+    }
+
+    private void validator() {
+        ValidatorFactory factory  = Validation.buildDefaultValidatorFactory();
+        Validator  validator = factory.getValidator();
+        Set<ConstraintViolation<LogDto>> violations = validator.validate(this);
+        if(!violations.isEmpty()){
+            throw new ConstraintViolationException(violations);
+        }
     }
 
 
